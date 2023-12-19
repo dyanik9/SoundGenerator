@@ -1,0 +1,8 @@
+{ "DESIGN_NAME": "tt_um_soundgen",
+"VERILOG_FILES": "../src/tt_um_soundgen.v",
+"CLOCK_PERIOD": 100, "CLOCK_PORT": "clk",
+"DIE_AREA": "0 0 108 108", "FP_SIZING": "absolute",
+"DESIGN_IS_CORE": 0, "RT_MAX_LAYER": "met4",
+"DESIGN_REPAIR_BUFFER_OUTPUT_PORTS": 0,
+"FP_IO_HLENGTH": 2, "FP_IO_VLENGTH": 2,
+"GRT_ALLOW_CONGESTION": 1 }
