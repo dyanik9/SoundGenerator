@@ -29,7 +29,7 @@ module tb ;
 	/* verilator lint_on STMTDLY */
 
 	initial begin
-		$dumpfile ( " counter_tb . vcd " ) ;
+		$dumpfile ( " tt_um_soundgen . vcd " ) ;
 		$dumpvars ;
 
 		/* verilator lint_off STMTDLY */

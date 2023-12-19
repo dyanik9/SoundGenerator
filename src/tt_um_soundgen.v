@@ -2,8 +2,8 @@
 2 Simple counter with generic bitwidth .
 3 */
 ‘default_nettype none
-‘ifndef __COUNTER__
-‘define __COUNTER__
+‘ifndef __SOUNDGEN__
+‘define __SOUNDGEN__
 
 module tt_um_soundgen
 #(
