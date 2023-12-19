@@ -5,7 +5,7 @@
 ‘ifndef __COUNTER__
 ‘define __COUNTER__
 
-module counter
+module tt_um_soundgen
 #(
 	parameter BW = 8 // optional parameter
 ) (
@@ -32,7 +32,7 @@ module counter
 			counter_val <= counter_val + {{( BW -1) {1 ’ b0 }} , 1 ’ b1 };
 		end
 	end
-endmodule // counter
+endmodule // tt_um_soundgen
 
 ‘endif
 ‘default_nettype wire
