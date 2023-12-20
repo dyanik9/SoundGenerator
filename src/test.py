@@ -8,10 +8,10 @@ async def test_counter(dut):
     clock = Clock(dut.clk, 100, units="ns")
     cocotb.start_soon(clock.start())
 
-    dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 1)
+    #dut.rst_n.value = 0
+    #await ClockCycles(dut.clk, 1)
     dut.rst_n.value = 1
-    await ClockCycles(dut.clk, 1)
+    #await ClockCycles(dut.clk, 1)
 
     await ClockCycles(dut.clk, 1000)
     #assert int(dut.counter_out.value) == 0
