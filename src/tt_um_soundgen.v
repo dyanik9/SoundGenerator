@@ -20,7 +20,7 @@ module tt_um_soundgen (
 	assign uio_out = {7'd0, pwm_out};
 
     wire reset = ! rst_n;
-    parameter t_on = 50;
+    parameter t_on = 8'd50;
     
     wire pwm_out;
     
