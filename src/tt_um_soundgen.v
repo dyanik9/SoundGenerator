@@ -35,7 +35,7 @@ module tt_um_soundgen (
         if (reset) begin
             ctr_r <= 4'd0;
         end else begin
-		ctr_r <= ctr_r + 1'b1;
+			ctr_r <= ctr_r + 1'b1;
         end
     end
 
