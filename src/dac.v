@@ -23,9 +23,9 @@ module dac #(parameter N = 8) (
     // here is the action
     always @(posedge clk) begin
         if (reset) begin
-            ctr_r <= 8'd0;
+            ctr_r <= 0;
         end else begin
-			ctr_r <= ctr_r + 8'd1;
+			ctr_r <= ctr_r + 1;
         end
     end
 
