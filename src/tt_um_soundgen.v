@@ -2,7 +2,7 @@
 
 `default_nettype none
 
-//‘include " dac . v "
+‘include " dac . v "
 
 module tt_um_soundgen (	// DAC bitwidth
     input wire       ena,      // will go high when the design is enabled
