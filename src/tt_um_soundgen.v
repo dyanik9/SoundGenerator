@@ -1,5 +1,3 @@
-// https://github.com/kvosic/kvosic_ws23_demo
-
 `default_nettype none
 
 //‘include " dac . v "
@@ -37,7 +35,7 @@ module tt_um_soundgen (
     // ---------
     
     // DAC
-    dac #(N) dac0 (
+    dac #(N) dac (
 		.clk(clk),
 		.reset(reset),
 		.t_on(t_on),
