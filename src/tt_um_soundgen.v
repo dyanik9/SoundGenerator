@@ -2,9 +2,9 @@
 
 `default_nettype none
 
-‘include " dac . v "
+//‘include " dac . v "
 
-module tt_um_soundgen (	// DAC bitwidth
+module tt_um_soundgen (
     input wire       ena,      // will go high when the design is enabled
     input wire       clk,      // clock
     input wire       rst_n,     // reset_n - low to reset
@@ -16,15 +16,15 @@ module tt_um_soundgen (	// DAC bitwidth
     output wire [7:0] uio_out,  // IOs: Bidirectional Output path
     output wire [7:0] uio_oe   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
 );	
-	parameter N = 8;
+	parameter N = 8;	// bitwidth
 
 	//assign uio_out[0] = out;
-	assign uio_out = {7'd0, out};
+	assign uio_out = {7'd0, pwm_out};
 
     wire reset = ! rst_n;
     parameter t_on = 127;
     
-    wire out;
+    wire pwm_out;
     
     // handle not needed wires
     /* verilator lint_off UNUSEDSIGNAL */
@@ -41,7 +41,7 @@ module tt_um_soundgen (	// DAC bitwidth
 		.clk(clk),
 		.reset(reset),
 		.t_on(t_on),
-		.pwm_out(out)
+		.pwm_out(pwm_out)
     );
 
     // here is the action
