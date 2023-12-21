@@ -10,6 +10,7 @@ project:
     - dac.v
     - prelude.v
     - sine.v
+    - clkgen.v
   top_module:  "tt_um_soundgen"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
 
 # How many tiles your design occupies? A single tile is about 167x108 uM.
