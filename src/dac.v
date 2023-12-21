@@ -17,7 +17,7 @@ module dac #(parameter N = 8) (
 	
 	// declare local registers
     reg [N-1:0] ctr_r;
-    wire pwm = ctr_r < t_on;	// 1 while count value < t_on
+    wire pwm = ctr_r < t_on;	// 1 while count value < t_on else 0
     
 
     // here is the action
