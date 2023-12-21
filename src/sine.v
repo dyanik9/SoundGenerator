@@ -9,6 +9,8 @@ module sine (
 
 );	
 
+	parameter N = 16;
+
 	wire LUT[N-1:0];
 	
 	// TODO: fill LUT (just copy paste from python)
