@@ -17,13 +17,13 @@ module clkgen #(parameter N = 8) (
 	
 	// declare local registers
     reg [N-1:0] ctr_r;
-    wire clk;
+    reg clk;
 
     // here is the action
     always @(posedge clk_i) begin
         if (reset) begin
             ctr_r <= 'd0;
-            clk <= 'd0;
+            clk <= 1'b0;
         end else if (ctr_r >= maxval) begin
 			clk <= ! clk;
 			ctr_r <= 'd0;

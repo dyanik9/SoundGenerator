@@ -6,7 +6,10 @@
 //‘define __SINE__
 
 module sine (
-
+	input wire clk,    	// clock
+    input wire reset,
+    input wire [x:0] frequency, // TODO: enum, where frequency (A,B,C,D,E,F,... can be selected) --> only once per time. if this is changed --> trigger reset to begin sinewave from beginning?
+	output wire [7:0] pwm_out
 );	
 	// this is a 8-bit sinewave, which will be played with varying frequency
 	// positive halfwave (128 long -> 7 Bit)
