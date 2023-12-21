@@ -5,7 +5,7 @@
 //‘ifndef __CLKGEN__
 //‘define __CLKGEN__
 
-module clkgen #(parameter N = 8) (
+module clkgen #(parameter N = 16) (
     input wire clk_i,    	// clock
     input wire reset,    	// reset
     input wire [N-1:0] maxval,	// maxval
@@ -18,6 +18,10 @@ module clkgen #(parameter N = 8) (
 	// declare local registers
     reg [N-1:0] ctr_r;
     reg clk;
+    
+    always @(maxval) begin
+    	// TODO: reset counter here? see TODO in sine.v
+    end
 
     // here is the action
     always @(posedge clk_i) begin
