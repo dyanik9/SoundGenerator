@@ -38,6 +38,8 @@ module prelude (
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
 	
+	reg [12:0] test;
+	
 	// sine generator
     sine sine (
 		.clk(clk_sine),
@@ -90,13 +92,14 @@ module prelude (
     // 3/8 = fs*3/4 --> duration = 6000 Samples
 
     // here is the action
-    always @(posedge clk) begin	// TODO: fs-clk needed here!
+    always @(posedge fs_clk) begin	// TODO: fs-clk needed here!
         if (reset) begin
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
             pitch <= {D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
             //duration <= {'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
             duration <= {'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
+            test <= 'd255;
         end else begin
         	// program flow to play prelude
         	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
@@ -109,6 +112,7 @@ module prelude (
         	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
+			test <= duration[ctr_pitch_i];
         end
     end
 
