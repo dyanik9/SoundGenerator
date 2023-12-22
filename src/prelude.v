@@ -118,6 +118,7 @@ module prelude (
 				end else begin
 					ctr_pitch_i <= ctr_pitch_i + 'd1;
 				end
+				ctr_duration <= 'd0;
         	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
