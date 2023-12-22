@@ -92,7 +92,7 @@ module prelude (
     // 3/8 = fs*3/4 --> duration = 6000 Samples
 
     // here is the action
-    always @(posedge fs_clk) begin	// TODO: fs-clk needed here!
+    always @(fs_clk) begin	// TODO: fs-clk needed here!
         if (reset) begin
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
