@@ -9,7 +9,7 @@ module prelude (
     input wire clk,    	// clock
     input wire reset,    	// reset
     output wire pwm_neg,
-    output wire pwm_pos,
+    output wire pwm_pos
 );	
 
 	parameter N = 8;	// bitwidth
@@ -25,12 +25,14 @@ module prelude (
 	parameter E = 6;		// 164.81 Hz	--> f = 42191.36 Hz		--> maxval = 23.7
 	parameter D = 7;		// 146.83 Hz	--> f = 37588.48 Hz		--> maxval = 26.6
 	
-	reg [3:0] pitch [20];		// melody to play
-	reg [12:0] duration [20];	// duration of each tone
+	reg [3:0] pitches [20];		// melody to play
+	reg [3:0] pitch;
+	
+	reg [12:0] durations [20];	// duration of each tone
+	reg [12:0] duration;
 	
 	reg [7:0] pos_sine;
 	reg [7:0] neg_sine;
-	reg [3:0] frequency;
 	
 	wire fs_clk;
 	parameter fs_maxval = 125;
@@ -70,7 +72,7 @@ module prelude (
 	clkgen #(7) fs (
 		.clk_i(clk),
 		.reset(reset),
-		.maxval(maxval),
+		.maxval(fs_maxval),
 		.clk_o(fs_clk)
     );
     
@@ -83,9 +85,9 @@ module prelude (
     );
     
     // TODO: correct maxval for given frequency! (we have 1MHz clk)
-    always @(frequency) begin
+    always @(pitch) begin
     	// TODO: reset clkgen, if frequency changed! (--> directly in clkgen, if maxval changed)
-		case(frequency)
+		case(pitch)
 			A:		sine_maxval = 'd18;
 			Dhigh: 	sine_maxval = 'd13;
 			C: 		sine_maxval = 'd15;
@@ -99,7 +101,8 @@ module prelude (
 	end
 	
 	always @(ctr_pitch_i) begin
-		frequency <= pitch[ctr_pitch_i];
+		pitch <= pitches[ctr_pitch_i];
+		duration <= durations[ctr_pitch_i];
 	end
 		
     
@@ -114,12 +117,12 @@ module prelude (
     always @(posedge clk) begin
         if (reset) begin
         	ctr_pitch_i <= 'd0;
-            pitch <= {D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-            duration <= {4000, 4000, 2000, 2000, 4000, 4000, 8000, 6000, 2000, 4000, 2000, 2000, 2000, 2000, 4000, 2000, 2000, 2000, 2000, 4000};	// das sind number of samples
-            frequency <= pitch[0];
+        	ctr_duration <= 'd0;
+            pitches <= {D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
+            durations <= {4000, 4000, 2000, 2000, 4000, 4000, 8000, 6000, 2000, 4000, 2000, 2000, 2000, 2000, 4000, 2000, 2000, 2000, 2000, 4000};	// das sind number of samples
         end else begin
         	// program flow to play prelude
-        	if(ctr_duration >= pitch[ctr_pitch_i]-1) begin	// tone finished --> select next pitch
+        	if(ctr_duration >= duration-1) begin	// tone finished --> select next pitch
         		if(ctr_pitch_i >= 19) begin
 					ctr_pitch_i <= 'd0;
 				end else begin
