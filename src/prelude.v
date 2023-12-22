@@ -48,18 +48,18 @@ module prelude (
     );
 	
 	// DAC pos edge
-    dac #(N) dac_pos (
+    dac #(5) dac_pos (
 		.clk(clk),
-		.period(fs_maxval),
+		.period(pitch[ctr_pitch_i]),
 		.reset(reset),
 		.t_on(pos_sine),
 		.pwm_out(pwm_pos)
     );
     
     // DAC neg edge
-    dac #(N) dac_neg (
+    dac #(5) dac_neg (
 		.clk(clk),
-		.period(fs_maxval),
+		.period(pitch[ctr_pitch_i]),
 		.reset(reset),
 		.t_on(neg_sine),
 		.pwm_out(pwm_neg)
