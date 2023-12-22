@@ -12,7 +12,7 @@ module prelude (
     output wire pwm_pos
 );	
 
-	parameter N = 8;	// bitwidth for DAC
+	parameter N = 7;	// bitwidth for DAC
 
 	// loop through sine with f*len(LUT) --> brings one period = 
 	
@@ -50,7 +50,7 @@ module prelude (
 	// DAC pos edge
     dac #(N) dac_pos (
 		.clk(clk),
-		.fs_clk(fs_clk),
+		.period(fs_maxval),
 		.reset(reset),
 		.t_on(pos_sine),
 		.pwm_out(pwm_pos)
@@ -59,7 +59,7 @@ module prelude (
     // DAC neg edge
     dac #(N) dac_neg (
 		.clk(clk),
-		.fs_clk(fs_clk),
+		.period(fs_maxval),
 		.reset(reset),
 		.t_on(neg_sine),
 		.pwm_out(pwm_neg)
