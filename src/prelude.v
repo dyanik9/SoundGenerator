@@ -63,7 +63,7 @@ module prelude (
     );
     
     // clkgen for fs
-	clkgen #(7) fs (
+	clkgen #(7) clkgen_fs (
 		.clk_i(clk),
 		.reset(reset),
 		.maxval(fs_maxval),
@@ -71,7 +71,7 @@ module prelude (
     );
     
     // clkgen for sinewave
-	clkgen #(5) clkgen (
+	clkgen #(5) clkgen_sin (
 		.clk_i(clk),
 		.reset(reset),
 		.maxval(pitch[ctr_pitch_i]),
@@ -95,11 +95,12 @@ module prelude (
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
             pitch <= {D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-            duration <= {4000, 4000, 2000, 2000, 4000, 4000, 8000, 6000, 2000, 4000, 2000, 2000, 2000, 2000, 4000, 2000, 2000, 2000, 2000, 4000};	// das sind number of samples
+            //duration <= {4000, 4000, 2000, 2000, 4000, 4000, 8000, 6000, 2000, 4000, 2000, 2000, 2000, 2000, 4000, 2000, 2000, 2000, 2000, 4000};	// das sind number of samples
+            duration <= {4, 4, 2, 2, 4, 4, 8, 6, 2, 4, 2, 2, 2, 2, 4, 2, 2, 2, 2, 4};	// das sind number of samples
         end else begin
         	// program flow to play prelude
         	if(ctr_duration >= duration[ctr_pitch_i]-1) begin	// tone finished --> select next pitch
-        		if(ctr_pitch_i >= 19) begin
+        		if(ctr_pitch_i >= 19) begin // len of all pitches
 					ctr_pitch_i <= 'd0;
 				end else begin
 					ctr_pitch_i <= ctr_pitch_i + 'd1;
