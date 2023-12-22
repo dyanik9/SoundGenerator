@@ -18,7 +18,7 @@ module sine (
 	reg [7:0] ctr_r;
 	
 	assign pos_out = (ctr_r < 'd128) ? LUT[ctr_r] : 'd0;
-	assign neg_out = (ctr_r >= 'd128) ? LUT[ctr_r] : 'd0;
+	assign neg_out = (ctr_r >= 'd128) ? LUT[ctr_r] : 'd0;		// TODO: array indexing does somehow not work!
 
     always @(posedge clk) begin
         if (reset) begin
