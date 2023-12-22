@@ -21,7 +21,7 @@ module prelude (
 	parameter C = 'd15;		// 261.62 Hz	--> f = 66974.72 Hz		--> maxval = 14.93
 	parameter B = 'd16;		// 246.94 Hz	--> f = 63216.64 Hz		--> maxval = 15.82
 	parameter G = 'd20;		// 195.99 Hz	--> f = 50173.44 Hz		--> maxval = 19.93
-	parameter Fis = 'd21;		// 184.99 Hz	--> f = 47357.44 Hz		--> maxval = 21.12
+	parameter Fis = 'd21;	// 184.99 Hz	--> f = 47357.44 Hz		--> maxval = 21.12
 	parameter E = 'd24;		// 164.81 Hz	--> f = 42191.36 Hz		--> maxval = 23.7
 	parameter D = 'd27;		// 146.83 Hz	--> f = 37588.48 Hz		--> maxval = 26.6
 	
@@ -103,7 +103,7 @@ module prelude (
             //duration <= {'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
             duration <= {'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
             test <= 'd255;
-        end else if (fs_clk) begin
+        end else if (fs_clk) begin	 // count at every fs
 	    	// program flow to play prelude
 	    	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
 	    		if(ctr_pitch_i >= 19) begin // len of all pitches
@@ -115,7 +115,7 @@ module prelude (
 	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
-			test <= duration[ctr_pitch_i];
+			test <= duration[ctr_pitch_i] - 'd1 ;
         end
     end
 

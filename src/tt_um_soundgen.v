@@ -35,11 +35,22 @@ module tt_um_soundgen (
     // ---------
     
     // Prelude
-    prelude prelude (
+    /*prelude prelude (
 		.clk(clk),
 		.reset(reset),
 		.pwm_neg(pwm_neg),
 		.pwm_pos(pwm_pos)
+    );*/
+    
+    
+    reg [7:0] pos_sine;
+	reg [7:0] neg_sine;
+    sine sine (
+		.clk(clk),
+		.sin_clk(clk),
+		.reset(reset),
+		.pos_out(pos_sine),
+		.neg_out(neg_sine)
     );
 
     // here is the action
