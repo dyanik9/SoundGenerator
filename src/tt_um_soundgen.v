@@ -43,6 +43,7 @@ module tt_um_soundgen (
     );*/
     
     
+    // test sine
     reg [7:0] pos_sine;
 	reg [7:0] neg_sine;
     sine sine (
