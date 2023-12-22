@@ -132,7 +132,7 @@ module prelude (
 			Fis: 	sine_maxval <= 'd21;
 			E: 		sine_maxval <= 'd24;
 			D: 		sine_maxval <= 'd27;
-			default: sine_maxval <= 'd0; // TODO: play no tone
+			default: sine_maxval <= 'd31; // TODO: play no tone
 		endcase
     end
 
