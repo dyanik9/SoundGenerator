@@ -90,7 +90,7 @@ module prelude (
     // 3/8 = fs*3/4 --> duration = 6000 Samples
 
     // here is the action
-    always @(posedge clk) begin
+    always @(posedge clk) begin	// TODO: fs-clk needed here!
         if (reset) begin
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
@@ -99,7 +99,7 @@ module prelude (
             duration <= {'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
         end else begin
         	// program flow to play prelude
-        	if(ctr_duration >= duration[ctr_pitch_i]-1) begin	// tone finished --> select next pitch
+        	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
         		if(ctr_pitch_i >= 19) begin // len of all pitches
 					ctr_pitch_i <= 'd0;
 				end else begin
