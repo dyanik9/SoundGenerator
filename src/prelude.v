@@ -81,19 +81,19 @@ module prelude (
 	
 	// TODO: correct maxval for given frequency? (we have 1MHz clk)
 	// TODO: reset clkgen, if frequency changed! (--> directly in clkgen, if maxval changed)
-	always @(ctr_pitch_i) begin
+	/*always @(ctr_pitch_i) begin
 		case(pitches[ctr_pitch_i])
-			A:		sine_maxval = 'd18;
-			Dhigh: 	sine_maxval = 'd13;
-			C: 		sine_maxval = 'd15;
-			B: 		sine_maxval = 'd16;
-			G: 		sine_maxval = 'd20;
-			Fis: 	sine_maxval = 'd21;
-			E: 		sine_maxval = 'd24;
-			D: 		sine_maxval = 'd27;
-			default: sine_maxval = 'd0; // TODO: play no tone
+			A:		sine_maxval <= 'd18;
+			Dhigh: 	sine_maxval <= 'd13;
+			C: 		sine_maxval <= 'd15;
+			B: 		sine_maxval <= 'd16;
+			G: 		sine_maxval <= 'd20;
+			Fis: 	sine_maxval <= 'd21;
+			E: 		sine_maxval <= 'd24;
+			D: 		sine_maxval <= 'd27;
+			default: sine_maxval <= 'd0; // TODO: play no tone
 		endcase
-	end
+	end*/
 		
     
     // fs = 8kHz (for PWM) --> clkgen --> maxval = 125 --> 7 Bit
@@ -122,6 +122,18 @@ module prelude (
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
         end
+        
+        case(pitches[ctr_pitch_i])
+			A:		sine_maxval <= 'd18;
+			Dhigh: 	sine_maxval <= 'd13;
+			C: 		sine_maxval <= 'd15;
+			B: 		sine_maxval <= 'd16;
+			G: 		sine_maxval <= 'd20;
+			Fis: 	sine_maxval <= 'd21;
+			E: 		sine_maxval <= 'd24;
+			D: 		sine_maxval <= 'd27;
+			default: sine_maxval <= 'd0; // TODO: play no tone
+		endcase
     end
 
 endmodule
