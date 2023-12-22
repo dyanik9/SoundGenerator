@@ -38,8 +38,6 @@ module prelude (
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
 	
-	reg [12:0] test;
-	
 	// sine generator
     sine sine (
 		.clk(clk),
@@ -100,9 +98,8 @@ module prelude (
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
             pitch = '{D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-            //duration <= {'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
-            duration = '{'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
-            test <= 'd255;
+            duration = '{'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
+            //duration = '{'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
         end else if (fs_clk) begin	 // count at every fs
 	    	// program flow to play prelude
 	    	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
@@ -115,7 +112,6 @@ module prelude (
 	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
-			test <= duration[ctr_pitch_i] - 'd1 ;
         end
     end
 
