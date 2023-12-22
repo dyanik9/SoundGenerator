@@ -32,7 +32,7 @@ module prelude (
 	reg [7:0] neg_sine;
 	reg clk_sine;
 	
-	wire fs_clk;
+	reg fs_clk;
 	parameter fs_maxval = 125;
 	
 	reg [4:0] ctr_pitch_i;
@@ -42,7 +42,8 @@ module prelude (
 	
 	// sine generator
     sine sine (
-		.clk(clk_sine),
+		.clk(clk),
+		.sin_clk(clk_sine),
 		.reset(reset),
 		.pos_out(pos_sine),
 		.neg_out(neg_sine)
@@ -50,7 +51,8 @@ module prelude (
 	
 	// DAC pos edge
     dac #(N) dac_pos (
-		.clk(fs_clk),
+		.clk(clk),
+		.fs_clk(fs_clk),
 		.reset(reset),
 		.t_on(pos_sine),
 		.pwm_out(pwm_pos)
@@ -58,7 +60,8 @@ module prelude (
     
     // DAC neg edge
     dac #(N) dac_neg (
-		.clk(fs_clk),
+		.clk(clk),
+		.fs_clk(fs_clk),
 		.reset(reset),
 		.t_on(neg_sine),
 		.pwm_out(pwm_neg)
@@ -92,7 +95,7 @@ module prelude (
     // 3/8 = fs*3/4 --> duration = 6000 Samples
 
     // here is the action
-    always @(fs_clk) begin	// TODO: fs-clk needed here!
+    always @(posedge clk) begin
         if (reset) begin
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
@@ -100,16 +103,16 @@ module prelude (
             //duration <= {'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
             duration <= {'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
             test <= 'd255;
-        end else begin
-        	// program flow to play prelude
-        	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
-        		if(ctr_pitch_i >= 19) begin // len of all pitches
+        end else if (fs_clk) begin
+	    	// program flow to play prelude
+	    	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
+	    		if(ctr_pitch_i >= 19) begin // len of all pitches
 					ctr_pitch_i <= 'd0;
 				end else begin
 					ctr_pitch_i <= ctr_pitch_i + 'd1;
 				end
 				ctr_duration <= 'd0;
-        	end else begin
+	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
 			test <= duration[ctr_pitch_i];

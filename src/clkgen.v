@@ -17,7 +17,7 @@ module clkgen #(parameter N = 16) (
 	
 	// declare local registers
     reg [N-1:0] ctr_r;
-    wire clk_strobe = ctr_r >= maxval;
+    reg clk_strobe;// = ctr_r >= maxval;
     
     always @(maxval) begin
     	// TODO: reset counter here if maxval changed
@@ -27,10 +27,13 @@ module clkgen #(parameter N = 16) (
     always @(posedge clk_i) begin
         if (reset) begin
             ctr_r <= 'd0;
+            clk_strobe <= 'b0;
         end else if (ctr_r >= maxval) begin
 			ctr_r <= 'd0;
+			clk_strobe <= 'b1;
         end else begin
 			ctr_r <= ctr_r + 'd1;
+			clk_strobe <= 'b0;
         end
     end
 

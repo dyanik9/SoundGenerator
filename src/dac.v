@@ -7,6 +7,7 @@
 
 module dac #(parameter N = 8) (
     input wire clk,    	// clock
+    input wire fs_clk,
     input wire reset,    	// reset
     input wire [N-1:0] t_on,	// on-time
     output wire pwm_out
@@ -24,7 +25,7 @@ module dac #(parameter N = 8) (
     always @(posedge clk) begin
         if (reset) begin
             ctr_r <= 'd0;
-        end else begin
+        end else if (fs_clk) begin
 			ctr_r <= ctr_r + 'd1;
         end
     end
