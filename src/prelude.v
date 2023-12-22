@@ -95,8 +95,8 @@ module prelude (
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
             pitch <= {D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-            //duration <= {4000, 4000, 2000, 2000, 4000, 4000, 8000, 6000, 2000, 4000, 2000, 2000, 2000, 2000, 4000, 2000, 2000, 2000, 2000, 4000};	// das sind number of samples
-            duration <= {4, 4, 2, 2, 4, 4, 8, 6, 2, 4, 2, 2, 2, 2, 4, 2, 2, 2, 2, 4};	// das sind number of samples
+            //duration <= {'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
+            duration <= {'d4, 'd4, 'd2, 'd2, 'd4, 'd4, 'd8, 'd6, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4, 'd2, 'd2, 'd2, 'd2, 'd4};	// das sind number of samples
         end else begin
         	// program flow to play prelude
         	if(ctr_duration >= duration[ctr_pitch_i]-1) begin	// tone finished --> select next pitch
