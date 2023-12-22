@@ -17,12 +17,12 @@ module tt_um_soundgen (
 	parameter N = 8;	// bitwidth
 
 	//assign uio_out[0] = out;
-	assign uio_out = {7'd0, pwm_out};
+	assign uio_out = {6'd0, pwm_pos, pwm_neg};	// TODO: which pins are these?
 
     wire reset = ! rst_n;
-    parameter t_on = 'd50;
     
-    wire pwm_out;
+    wire pwm_neg;
+    wire pwm_pos;
     
     // handle not needed wires
     /* verilator lint_off UNUSEDSIGNAL */
@@ -34,17 +34,17 @@ module tt_um_soundgen (
     assign uo_out = 8'd0;
     // ---------
     
-    // DAC
-    dac #(N) dac (
+    // Prelude
+    prelude prelude (
 		.clk(clk),
 		.reset(reset),
-		.t_on(t_on),
-		.pwm_out(pwm_out)
+		.pwm_neg(pwm_neg),
+		.pwm_pos(pwm_pos)
     );
 
     // here is the action
     always @(posedge clk) begin
-    	// foo
+    	// not needed
     end
 
 endmodule // tt_um_soundgen
