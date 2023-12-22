@@ -35,16 +35,16 @@ module tt_um_soundgen (
     // ---------
     
     // Prelude
-    /*prelude prelude (
+    prelude prelude (
 		.clk(clk),
 		.reset(reset),
 		.pwm_neg(pwm_neg),
 		.pwm_pos(pwm_pos)
-    );*/
+    );
     
     
     // test sine
-    reg [7:0] pos_sine;
+    /*reg [7:0] pos_sine;
 	reg [7:0] neg_sine;
     sine sine (
 		.clk(clk),
@@ -52,7 +52,7 @@ module tt_um_soundgen (
 		.reset(reset),
 		.pos_out(pos_sine),
 		.neg_out(neg_sine)
-    );
+    );*/
 
     // here is the action
     always @(posedge clk) begin
