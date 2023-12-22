@@ -17,10 +17,10 @@ module sine (
 	reg [7:0] LUT [0:255];	// positive halfwave (0-127) and negative halfwave (128-255)
 	reg [7:0] ctr_r;
 	
-	wire [7:0] i = ctr_r;
+	wire [7:0] test = LUT[0];
 	
-	assign pos_out = (ctr_r < 'd128) ? LUT[i] : 'd0;
-	assign neg_out = (ctr_r >= 'd128) ? LUT[i] : 'd0;		// TODO: array indexing does somehow not work!
+	assign pos_out = (ctr_r < 'd128) ? LUT[ctr_r] : 'd0;
+	assign neg_out = (ctr_r >= 'd128) ? LUT[ctr_r] : 'd0;		// TODO: array indexing does somehow not work!
 
     always @(posedge clk) begin
         if (reset) begin
