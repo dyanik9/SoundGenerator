@@ -34,7 +34,7 @@ module prelude (
 	reg clk_sine;
 	
 	reg fs_clk;
-	parameter fs_maxval = 125;
+	parameter fs_maxval = 'd125;
 	
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
@@ -47,11 +47,13 @@ module prelude (
 		.pos_out(pos_sine),
 		.neg_out(neg_sine)
     );
+    
+    parameter DAC_PERIOD = 'd3333;	// 10*fmax ~ 3000Hz --> with 10MHz clk --> period = 3333.33
 	
 	// DAC pos edge
     dac #(PITCH_BITWIDTH) dac_pos (
 		.clk(clk),
-		.period(pitch[ctr_pitch_i]),
+		.period(DAC_PERIOD),
 		.reset(reset),
 		.t_on(pos_sine),
 		.pwm_out(pwm_pos)
@@ -60,7 +62,7 @@ module prelude (
     // DAC neg edge
     dac #(PITCH_BITWIDTH) dac_neg (
 		.clk(clk),
-		.period(pitch[ctr_pitch_i]),
+		.period(DAC_PERIOD),
 		.reset(reset),
 		.t_on(neg_sine),
 		.pwm_out(pwm_neg)
@@ -104,7 +106,7 @@ module prelude (
         end else if (fs_clk) begin	 // count at every fs
 	    	// program flow to play prelude
 	    	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
-	    		if(ctr_pitch_i >= 19) begin // len of all pitches
+	    		if(ctr_pitch_i >= 'd19) begin // len of all pitches
 					ctr_pitch_i <= 'd0;
 				end else begin
 					ctr_pitch_i <= ctr_pitch_i + 'd1;
