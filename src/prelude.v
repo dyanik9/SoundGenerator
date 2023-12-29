@@ -36,7 +36,7 @@ module prelude (
 	reg clk_sine;
 	
 	reg fs_clk;
-	parameter fs_maxval = 'd1250;
+	parameter fs_maxval = 'd1250;	// 8kHz --> 11Bit counter needed
 	
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
@@ -71,7 +71,7 @@ module prelude (
     );
     
     // clkgen for fs
-	clkgen #(7) clkgen_fs (
+	clkgen #(11) clkgen_fs (
 		.clk_i(clk),
 		.reset(reset),
 		.maxval(fs_maxval),
