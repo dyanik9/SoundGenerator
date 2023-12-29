@@ -35,9 +35,12 @@ module prelude (
 	reg [PITCH_BITWIDTH-1:0] neg_sine;
 	reg clk_sine;
 	
+	reg sin_reset;
+	
 	reg fs_clk;
 	parameter fs_maxval = 'd1250;	// 8kHz --> 11Bit counter needed
-	
+		
+	// TODO: is this really needed (19kHz PWM or 9,7kHz (with clkgen)?)
 	reg dac_clk;
 	parameter dac_clk_maxval = 'd2;	// ~9.7kHz PWM --> 2Bit counter needed
 	
@@ -48,7 +51,7 @@ module prelude (
     sine sine (
 		.clk(clk),
 		.sin_clk(clk_sine),
-		.reset(reset),
+		.reset(reset | sin_reset),
 		.pos_out(pos_sine),
 		.neg_out(neg_sine)
     );
@@ -92,7 +95,7 @@ module prelude (
     );
     
     // clkgen for DAC
-	clkgen #(PITCH_BITWIDTH) clkgen_dac (
+	clkgen #(2) clkgen_dac (
 		.clk_i(clk),
 		.reset(reset),
 		.maxval(dac_clk_maxval),
@@ -115,6 +118,7 @@ module prelude (
         	ctr_duration <= 'd0;
         	pitch <= 'd511;
         	duration <= 'd4095;
+        	sin_reset <= 'b0;
         end else if (fs_clk) begin	 // at every fs
 	    	// program flow to play prelude
 	    	case(ctr_pitch_i)
@@ -149,8 +153,10 @@ module prelude (
 					ctr_pitch_i <= ctr_pitch_i + 'd1;
 				end
 				ctr_duration <= 'd0;
+				sin_reset <= 'b1;
 	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
+				sin_reset <= 'b0;
 			end
         end
     end

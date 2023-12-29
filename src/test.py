@@ -13,6 +13,7 @@ async def test_counter(dut):
     dut.rst_n.value = 1
     await ClockCycles(dut.clk, 1)
 
-    await ClockCycles(dut.clk, 80000000)	# 8s simulation
+    #await ClockCycles(dut.clk, 80000000)	# 8s simulation
     #await ClockCycles(dut.clk, 1000000)	# 100ms simulation
+    await ClockCycles(dut.clk, 10000000)	# 1s simulation
     #assert int(dut.counter_out.value) == 0
