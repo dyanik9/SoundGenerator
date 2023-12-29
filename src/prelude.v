@@ -38,6 +38,9 @@ module prelude (
 	reg fs_clk;
 	parameter fs_maxval = 'd1250;	// 8kHz --> 11Bit counter needed
 	
+	reg dac_clk;
+	parameter dac_clk_maxval = 'd2;	// ~9.7kHz PWM --> 2Bit counter needed
+	
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
 	
@@ -55,7 +58,7 @@ module prelude (
 	// DAC pos edge
     dac #(PITCH_BITWIDTH) dac_pos (
 		.clk(clk),
-		.dac_clk(fs_clk),
+		.dac_clk(dac_clk),
 		.period(DAC_PERIOD),
 		.reset(reset),
 		.t_on(pos_sine),
@@ -65,7 +68,7 @@ module prelude (
     // DAC neg edge
     dac #(PITCH_BITWIDTH) dac_neg (
 		.clk(clk),
-		.dac_clk(fs_clk),
+		.dac_clk(dac_clk),
 		.period(DAC_PERIOD),
 		.reset(reset),
 		.t_on(neg_sine),
@@ -86,6 +89,14 @@ module prelude (
 		.reset(reset),
 		.maxval(pitch),
 		.clk_o(clk_sine)
+    );
+    
+    // clkgen for DAC
+	clkgen #(PITCH_BITWIDTH) clkgen_dac (
+		.clk_i(clk),
+		.reset(reset),
+		.maxval(dac_clk_maxval),
+		.clk_o(dac_clk)
     );
 	
 	// TODO: correct maxval for given frequency? (we have 10MHz clk) --> YES!

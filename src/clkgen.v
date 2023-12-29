@@ -20,7 +20,7 @@ module clkgen #(parameter N = 16) (
     reg clk_strobe;// = ctr_r >= maxval;
     
     always @(maxval) begin
-    	// TODO: reset counter here if maxval changed
+    	// TODO: reset counter here if maxval changed?
     end
 
     // here is the action
