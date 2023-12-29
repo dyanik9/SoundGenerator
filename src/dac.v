@@ -7,6 +7,7 @@
 
 module dac #(parameter N = 8) (
     input wire clk,    	// clock
+    input wire dac_clk,
     input wire reset,    	// reset
     input wire [N-1:0] t_on,	// on-time
     input wire [N-1:0] period,
@@ -25,7 +26,7 @@ module dac #(parameter N = 8) (
     always @(posedge clk) begin
         if (reset) begin
             ctr_r <= 'd0;
-        end else begin
+        end else if (dac_clk) begin
 			if(ctr_r >= period) begin // len of all pitches
 				ctr_r <= 'd0;
 			end else begin

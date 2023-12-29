@@ -55,6 +55,7 @@ module prelude (
 	// DAC pos edge
     dac #(PITCH_BITWIDTH) dac_pos (
 		.clk(clk),
+		.dac_clk(fs_clk),
 		.period(DAC_PERIOD),
 		.reset(reset),
 		.t_on(pos_sine),
@@ -64,6 +65,7 @@ module prelude (
     // DAC neg edge
     dac #(PITCH_BITWIDTH) dac_neg (
 		.clk(clk),
+		.dac_clk(fs_clk),
 		.period(DAC_PERIOD),
 		.reset(reset),
 		.t_on(neg_sine),
