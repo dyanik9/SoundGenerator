@@ -15,8 +15,7 @@ module tt_um_soundgen (
     output wire [7:0] uio_oe   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
 );	
 
-	//assign uio_out[0] = out;
-	assign uio_out = {6'd0, pwm_pos, pwm_neg};	// TODO: which pins are these?
+	assign uio_out = {6'b0, pwm_pos, pwm_neg};	// TODO: which pins are these?
 
     wire reset = ! rst_n;
     
@@ -29,8 +28,8 @@ module tt_um_soundgen (
     wire [7:0] dummy2 = uio_in;
     wire foo = ena;
     /* verilator lint_on UNUSEDSIGNAL */
-    assign uio_oe = 8'd0;
-    assign uo_out = 8'd0;
+    assign uio_oe = 8'b1;
+    assign uo_out = 8'b0;
     // ---------
     
     // Prelude
@@ -54,8 +53,8 @@ module tt_um_soundgen (
     );*/
 
     // here is the action
-    always @(posedge clk) begin
+    /*always @(posedge clk) begin
     	// not needed
-    end
+    end*/
 
 endmodule // tt_um_soundgen

@@ -18,13 +18,9 @@ module clkgen #(parameter N = 16) (
 	// declare local registers
     reg [N-1:0] ctr_r;
     reg clk_strobe;// = ctr_r >= maxval;
-    
-    always @(maxval) begin
-    	// TODO: reset counter here if maxval changed?
-    end
 
     // here is the action
-    always @(posedge clk_i) begin
+    always @(posedge clk_i) begin 
         if (reset) begin
             ctr_r <= 'd0;
             clk_strobe <= 'b0;

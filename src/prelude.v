@@ -35,7 +35,7 @@ module prelude (
 	reg [PITCH_BITWIDTH-1:0] neg_sine;
 	reg clk_sine;
 	
-	reg sin_reset;
+	reg duration_reset;
 	
 	reg fs_clk;
 	parameter fs_maxval = 'd1250;	// 8kHz --> 11Bit counter needed
@@ -51,7 +51,7 @@ module prelude (
     sine sine (
 		.clk(clk),
 		.sin_clk(clk_sine),
-		.reset(reset | sin_reset),
+		.reset(reset | duration_reset),
 		.pos_out(pos_sine),
 		.neg_out(neg_sine)
     );
@@ -63,7 +63,7 @@ module prelude (
 		.clk(clk),
 		.dac_clk(dac_clk),
 		.period(DAC_PERIOD),
-		.reset(reset),
+		.reset(reset | duration_reset),
 		.t_on(pos_sine),
 		.pwm_out(pwm_pos)
     );
@@ -73,7 +73,7 @@ module prelude (
 		.clk(clk),
 		.dac_clk(dac_clk),
 		.period(DAC_PERIOD),
-		.reset(reset),
+		.reset(reset | duration_reset),
 		.t_on(neg_sine),
 		.pwm_out(pwm_neg)
     );
@@ -89,7 +89,7 @@ module prelude (
     // clkgen for sinewave
 	clkgen #(PITCH_BITWIDTH) clkgen_sin (
 		.clk_i(clk),
-		.reset(reset),
+		.reset(reset | duration_reset),
 		.maxval(pitch),
 		.clk_o(clk_sine)
     );
@@ -97,14 +97,10 @@ module prelude (
     // clkgen for DAC
 	clkgen #(2) clkgen_dac (
 		.clk_i(clk),
-		.reset(reset),
+		.reset(reset | duration_reset),
 		.maxval(dac_clk_maxval),
 		.clk_o(dac_clk)
-    );
-	
-	// TODO: correct maxval for given frequency? (we have 10MHz clk) --> YES!
-	// TODO: reset clkgen, if frequency changed! (--> directly in clkgen, if maxval changed)
-		
+    );		
     
     // fs = 8kHz (for PWM) --> clkgen --> maxval = 125 --> 7 Bit
     // 1/4 = fs/2 --> duration = 4000 Samples
@@ -118,10 +114,10 @@ module prelude (
         	ctr_duration <= 'd0;
         	pitch <= 'd511;
         	duration <= 'd4095;
-        	sin_reset <= 'b0;
+        	duration_reset <= 'b0;
         end else if (fs_clk) begin	 // at every fs
-	    	// program flow to play prelude
-	    	case(ctr_pitch_i)
+	    	// prelude is stored here
+	    	/*case(ctr_pitch_i)
 		    	'd0: begin pitch <= D; duration <= 'd4000; end
 				'd1: begin pitch <= G; duration <= 'd4000; end
 				'd2: begin pitch <= G; duration <= 'd2000; end
@@ -143,9 +139,33 @@ module prelude (
 				'd18: begin pitch <= B; duration <= 'd2000; end
 				'd19: begin pitch <= A; duration <= 'd4000; end
 		    	default: begin pitch <= 'd511; duration <= 'd4095; end
+		    endcase*/
+		    
+		    case(ctr_pitch_i)
+		    	'd0: begin pitch <= D; duration <= 'd400; end
+				'd1: begin pitch <= G; duration <= 'd400; end
+				'd2: begin pitch <= G; duration <= 'd200; end
+				'd3: begin pitch <= A; duration <= 'd200; end
+				'd4: begin pitch <= B; duration <= 'd400; end
+				'd5: begin pitch <= G; duration <= 'd400; end
+				'd6: begin pitch <= Dhigh; duration <= 'd800; end
+				'd7: begin pitch <= B; duration <= 'd600; end
+				'd8: begin pitch <= B; duration <= 'd200; end
+				'd9: begin pitch <= C; duration <= 'd400; end
+				'd10: begin pitch <= Dhigh; duration <= 'd200; end
+				'd11: begin pitch <= C; duration <= 'd200; end
+				'd12: begin pitch <= B; duration <= 'd200; end
+				'd13: begin pitch <= C; duration <= 'd200; end
+				'd14: begin pitch <= Dhigh; duration <= 'd400; end
+				'd15: begin pitch <= A; duration <= 'd200; end
+				'd16: begin pitch <= G; duration <= 'd200; end
+				'd17: begin pitch <= A; duration <= 'd200; end
+				'd18: begin pitch <= B; duration <= 'd200; end
+				'd19: begin pitch <= A; duration <= 'd400; end
+		    	default: begin pitch <= 'd511; duration <= 'd409; end
 		    endcase
 		    
-	    	//if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
+		    // play melody
 	    	if(ctr_duration >= duration-'d1) begin
 	    		if(ctr_pitch_i >= 'd19) begin // len of all pitches
 					ctr_pitch_i <= 'd0;
@@ -153,10 +173,10 @@ module prelude (
 					ctr_pitch_i <= ctr_pitch_i + 'd1;
 				end
 				ctr_duration <= 'd0;
-				sin_reset <= 'b1;
+				duration_reset <= 'b1;
 	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
-				sin_reset <= 'b0;
+				duration_reset <= 'b0;
 			end
         end
     end
