@@ -48,7 +48,7 @@ module prelude (
 		.neg_out(neg_sine)
     );
     
-    parameter DAC_PERIOD = 'd3333;	// 10*fmax ~ 3000Hz --> with 10MHz clk --> period = 3333.33
+    parameter DAC_PERIOD = 'd511;	// 10*fmax ~ 3000Hz --> with 10MHz clk --> period = 3333.33
 	
 	// DAC pos edge
     dac #(PITCH_BITWIDTH) dac_pos (
