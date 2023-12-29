@@ -31,10 +31,8 @@ module prelude (
 	//reg [PITCH_BITWIDTH-1:0] pitch [20];		// melody to play
 	//reg [12:0] duration [20];	// duration of each tone
 	
-	reg [PITCH_BITWIDTH-1:0] pitch [20] = '{D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-	
-	
-	reg [12:0] duration [20] = '{'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
+	reg [PITCH_BITWIDTH-1:0] pitch;
+	reg [12:0] duration;
 	
 	reg [PITCH_BITWIDTH-1:0] pos_sine;
 	reg [PITCH_BITWIDTH-1:0] neg_sine;
@@ -94,7 +92,8 @@ module prelude (
 	clkgen #(PITCH_BITWIDTH) clkgen_sin (
 		.clk_i(clk),
 		.reset(reset),
-		.maxval(pitch[ctr_pitch_i]),
+		//.maxval(pitch[ctr_pitch_i]),
+		.maxval(pitch),
 		.clk_o(clk_sine)
     );
 	
@@ -129,6 +128,30 @@ module prelude (
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
         end
+        
+        casex(ctr_pitch_i)
+        	'd0: begin pitch <= D; duration <= 'd4000; end
+			'd1: begin pitch <= G; duration <= 'd4000; end
+			'd2: begin pitch <= G; duration <= 'd2000; end
+			'd3: begin pitch <= A; duration <= 'd2000; end
+			'd4: begin pitch <= B; duration <= 'd4000; end
+			'd5: begin pitch <= G; duration <= 'd4000; end
+			'd6: begin pitch <= Dhigh; duration <= 'd8000; end
+			'd7: begin pitch <= B; duration <= 'd6000; end
+			'd8: begin pitch <= B; duration <= 'd2000; end
+			'd9: begin pitch <= C; duration <= 'd4000; end
+			'd10: begin pitch <= Dhigh; duration <= 'd2000; end
+			'd11: begin pitch <= C; duration <= 'd2000; end
+			'd12: begin pitch <= B; duration <= 'd2000; end
+			'd13: begin pitch <= C; duration <= 'd2000; end
+			'd14: begin pitch <= Dhigh; duration <= 'd4000; end
+			'd15: begin pitch <= A; duration <= 'd2000; end
+			'd16: begin pitch <= G; duration <= 'd2000; end
+			'd17: begin pitch <= A; duration <= 'd2000; end
+			'd18: begin pitch <= B; duration <= 'd2000; end
+			'd19: begin pitch <= A; duration <= 'd4000; end
+        	default: begin pitch <= 'd0; duration <= 'd0; end
+        endcase
     end
 
 endmodule

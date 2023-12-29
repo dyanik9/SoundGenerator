@@ -25,10 +25,6 @@ module sine #(parameter N = 9) (
 	
 	assign pos_out = pos_out_r;
 	assign neg_out = neg_out_r;
-	
-	always @(ctr_r) begin
-		
-	end
 
     always @(posedge clk) begin
         if (reset) begin
@@ -38,6 +34,7 @@ module sine #(parameter N = 9) (
         end else if (sin_clk) begin
 			ctr_r <= ctr_r + 'd1;	// auto overflow!
         end
+        
         casex(ctr_r)
 			'd0: begin pos_out_r <= 'd0; neg_out_r <= 'd0; end
 			'd1: begin pos_out_r <= 'd12; neg_out_r <= 'd0; end
