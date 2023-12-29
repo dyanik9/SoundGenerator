@@ -12,24 +12,25 @@ module prelude (
     output wire pwm_pos
 );	
 
-	parameter N = 7;	// bitwidth for DAC
+	parameter PITCH_BITWIDTH = 9;
 
-	// loop through sine with f*len(LUT) --> brings one period = 
+	// loop through sine with f*len(LUT) --> brings one period --> we need 9 Bit counter
+	// we have 10MHz clk
 	
-	parameter A = 'd18;		// 220 Hz		--> f = 56320 Hz		--> maxval = 17.75
-	parameter Dhigh = 'd13;	// 293.66 Hz	--> f = 75176.96 Hz		--> maxval = 13.30
-	parameter C = 'd15;		// 261.62 Hz	--> f = 66974.72 Hz		--> maxval = 14.93
-	parameter B = 'd16;		// 246.94 Hz	--> f = 63216.64 Hz		--> maxval = 15.82
-	parameter G = 'd20;		// 195.99 Hz	--> f = 50173.44 Hz		--> maxval = 19.93
-	parameter Fis = 'd21;	// 184.99 Hz	--> f = 47357.44 Hz		--> maxval = 21.12
-	parameter E = 'd24;		// 164.81 Hz	--> f = 42191.36 Hz		--> maxval = 23.7
-	parameter D = 'd27;		// 146.83 Hz	--> f = 37588.48 Hz		--> maxval = 26.6
+	parameter A = 'd177;		// 220 Hz		--> f = 56320 Hz		--> maxval = 177.5
+	parameter Dhigh = 'd133;	// 293.66 Hz	--> f = 75176.96 Hz		--> maxval = 133
+	parameter C = 'd149;		// 261.62 Hz	--> f = 66974.72 Hz		--> maxval = 149.3
+	parameter B = 'd158;		// 246.94 Hz	--> f = 63216.64 Hz		--> maxval = 158.2
+	parameter G = 'd199;		// 195.99 Hz	--> f = 50173.44 Hz		--> maxval = 199.3
+	parameter Fis = 'd211;	// 184.99 Hz	--> f = 47357.44 Hz		--> maxval = 211.2
+	parameter E = 'd237;		// 164.81 Hz	--> f = 42191.36 Hz		--> maxval = 237
+	parameter D = 'd266;		// 146.83 Hz	--> f = 37588.48 Hz		--> maxval = 266
 	
-	reg [4:0] pitch [20];		// melody to play
+	reg [PITCH_BITWIDTH-1:0] pitch [20];		// melody to play
 	reg [12:0] duration [20];	// duration of each tone
 	
-	reg [7:0] pos_sine;
-	reg [7:0] neg_sine;
+	reg [PITCH_BITWIDTH-1:0] pos_sine;
+	reg [PITCH_BITWIDTH-1:0] neg_sine;
 	reg clk_sine;
 	
 	reg fs_clk;
@@ -39,7 +40,7 @@ module prelude (
 	reg [12:0] ctr_duration;
 	
 	// sine generator
-    sine sine (
+    sine #(PITCH_BITWIDTH) sine (
 		.clk(clk),
 		.sin_clk(clk_sine),
 		.reset(reset),
@@ -48,7 +49,7 @@ module prelude (
     );
 	
 	// DAC pos edge
-    dac #(5) dac_pos (
+    dac #(PITCH_BITWIDTH) dac_pos (
 		.clk(clk),
 		.period(pitch[ctr_pitch_i]),
 		.reset(reset),
@@ -57,7 +58,7 @@ module prelude (
     );
     
     // DAC neg edge
-    dac #(5) dac_neg (
+    dac #(PITCH_BITWIDTH) dac_neg (
 		.clk(clk),
 		.period(pitch[ctr_pitch_i]),
 		.reset(reset),
@@ -74,14 +75,14 @@ module prelude (
     );
     
     // clkgen for sinewave
-	clkgen #(5) clkgen_sin (
+	clkgen #(PITCH_BITWIDTH) clkgen_sin (
 		.clk_i(clk),
 		.reset(reset),
 		.maxval(pitch[ctr_pitch_i]),
 		.clk_o(clk_sine)
     );
 	
-	// TODO: correct maxval for given frequency? (we have 1MHz clk)
+	// TODO: correct maxval for given frequency? (we have 10MHz clk)
 	// TODO: reset clkgen, if frequency changed! (--> directly in clkgen, if maxval changed)
 		
     

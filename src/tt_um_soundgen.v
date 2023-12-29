@@ -14,7 +14,6 @@ module tt_um_soundgen (
     output wire [7:0] uio_out,  // IOs: Bidirectional Output path
     output wire [7:0] uio_oe   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
 );	
-	parameter N = 8;	// bitwidth
 
 	//assign uio_out[0] = out;
 	assign uio_out = {6'd0, pwm_pos, pwm_neg};	// TODO: which pins are these?
