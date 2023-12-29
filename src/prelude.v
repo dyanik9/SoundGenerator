@@ -82,7 +82,6 @@ module prelude (
 	clkgen #(PITCH_BITWIDTH) clkgen_sin (
 		.clk_i(clk),
 		.reset(reset),
-		//.maxval(pitch[ctr_pitch_i]),
 		.maxval(pitch),
 		.clk_o(clk_sine)
     );
@@ -92,20 +91,18 @@ module prelude (
 		
     
     // fs = 8kHz (for PWM) --> clkgen --> maxval = 125 --> 7 Bit
-    
     // 1/4 = fs/2 --> duration = 4000 Samples
     // 1/8 = fs/4 --> duration = 2000 Samples
     // 1/2 = fs   --> duration = 8000 Samples
     // 3/8 = fs*3/4 --> duration = 6000 Samples
 
-    // here is the action
     always @(posedge clk) begin
         if (reset) begin
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
-        	pitch <= 'd0;
-        	duration <= 'd0;
-        end else if (fs_clk) begin	 // count at every fs
+        	pitch <= 'd511;
+        	duration <= 'd4095;
+        end else if (fs_clk) begin	 // at every fs
 	    	// program flow to play prelude
 	    	case(ctr_pitch_i)
 		    	'd0: begin pitch <= D; duration <= 'd4000; end
@@ -128,7 +125,7 @@ module prelude (
 				'd17: begin pitch <= A; duration <= 'd2000; end
 				'd18: begin pitch <= B; duration <= 'd2000; end
 				'd19: begin pitch <= A; duration <= 'd4000; end
-		    	default: begin pitch <= 'd0; duration <= 'd0; end
+		    	default: begin pitch <= 'd511; duration <= 'd4095; end
 		    endcase
 		    
 	    	//if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
