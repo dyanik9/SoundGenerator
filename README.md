@@ -19,6 +19,10 @@ Please see the instructions for:
 - [Enabling GitHub Actions](https://tinytapeout.com/faq/#when-i-commit-my-change-the-gds-action-isnt-running)
 - [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
 
+
+https://github.com/dyanik9/SoundGenerator/assets/49497605/4984bcf2-3230-41aa-a64f-a4861b7525ec
+
+
 ## Resources
 
 - [FAQ](https://tinytapeout.com/faq/)
