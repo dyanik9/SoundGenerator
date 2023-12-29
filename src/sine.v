@@ -35,7 +35,7 @@ module sine #(parameter N = 9) (
 			ctr_r <= ctr_r + 'd1;	// auto overflow!
         end
         
-        casex(ctr_r)
+        case(ctr_r)
 			'd0: begin pos_out_r <= 'd0; neg_out_r <= 'd0; end
 			'd1: begin pos_out_r <= 'd12; neg_out_r <= 'd0; end
 			'd2: begin pos_out_r <= 'd25; neg_out_r <= 'd0; end

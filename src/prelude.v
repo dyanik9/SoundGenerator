@@ -113,11 +113,38 @@ module prelude (
         if (reset) begin
         	ctr_pitch_i <= 'd0;
         	ctr_duration <= 'd0;
+        	pitch <= 'd0;
+        	duration <= 'd0;
             //pitch = '{D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
             //duration = '{'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
         end else if (fs_clk) begin	 // count at every fs
 	    	// program flow to play prelude
-	    	if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
+	    	case(ctr_pitch_i)
+		    	'd0: begin pitch <= D; duration <= 'd4000; end
+				'd1: begin pitch <= G; duration <= 'd4000; end
+				'd2: begin pitch <= G; duration <= 'd2000; end
+				'd3: begin pitch <= A; duration <= 'd2000; end
+				'd4: begin pitch <= B; duration <= 'd4000; end
+				'd5: begin pitch <= G; duration <= 'd4000; end
+				'd6: begin pitch <= Dhigh; duration <= 'd8000; end
+				'd7: begin pitch <= B; duration <= 'd6000; end
+				'd8: begin pitch <= B; duration <= 'd2000; end
+				'd9: begin pitch <= C; duration <= 'd4000; end
+				'd10: begin pitch <= Dhigh; duration <= 'd2000; end
+				'd11: begin pitch <= C; duration <= 'd2000; end
+				'd12: begin pitch <= B; duration <= 'd2000; end
+				'd13: begin pitch <= C; duration <= 'd2000; end
+				'd14: begin pitch <= Dhigh; duration <= 'd4000; end
+				'd15: begin pitch <= A; duration <= 'd2000; end
+				'd16: begin pitch <= G; duration <= 'd2000; end
+				'd17: begin pitch <= A; duration <= 'd2000; end
+				'd18: begin pitch <= B; duration <= 'd2000; end
+				'd19: begin pitch <= A; duration <= 'd4000; end
+		    	default: begin pitch <= 'd0; duration <= 'd0; end
+		    endcase
+		    
+	    	//if(ctr_duration >= duration[ctr_pitch_i]-'d1) begin	// tone finished --> select next pitch
+	    	if(ctr_duration >= duration-'d1) begin
 	    		if(ctr_pitch_i >= 'd19) begin // len of all pitches
 					ctr_pitch_i <= 'd0;
 				end else begin
@@ -128,30 +155,6 @@ module prelude (
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
         end
-        
-        casex(ctr_pitch_i)
-        	'd0: begin pitch <= D; duration <= 'd4000; end
-			'd1: begin pitch <= G; duration <= 'd4000; end
-			'd2: begin pitch <= G; duration <= 'd2000; end
-			'd3: begin pitch <= A; duration <= 'd2000; end
-			'd4: begin pitch <= B; duration <= 'd4000; end
-			'd5: begin pitch <= G; duration <= 'd4000; end
-			'd6: begin pitch <= Dhigh; duration <= 'd8000; end
-			'd7: begin pitch <= B; duration <= 'd6000; end
-			'd8: begin pitch <= B; duration <= 'd2000; end
-			'd9: begin pitch <= C; duration <= 'd4000; end
-			'd10: begin pitch <= Dhigh; duration <= 'd2000; end
-			'd11: begin pitch <= C; duration <= 'd2000; end
-			'd12: begin pitch <= B; duration <= 'd2000; end
-			'd13: begin pitch <= C; duration <= 'd2000; end
-			'd14: begin pitch <= Dhigh; duration <= 'd4000; end
-			'd15: begin pitch <= A; duration <= 'd2000; end
-			'd16: begin pitch <= G; duration <= 'd2000; end
-			'd17: begin pitch <= A; duration <= 'd2000; end
-			'd18: begin pitch <= B; duration <= 'd2000; end
-			'd19: begin pitch <= A; duration <= 'd4000; end
-        	default: begin pitch <= 'd0; duration <= 'd0; end
-        endcase
     end
 
 endmodule
