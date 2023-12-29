@@ -28,31 +28,21 @@ module prelude (
 	parameter D = 'd266;		// 146.83 Hz	--> f = 37588.48 Hz		--> maxval = 266
 	/* verilator lint_on UNUSEDPARAM */
 	
-	//reg [PITCH_BITWIDTH-1:0] pitch [20];		// melody to play
-	//reg [12:0] duration [20];	// duration of each tone
-	
-	reg [PITCH_BITWIDTH-1:0] pitch;
-	reg [12:0] duration;
+	reg [PITCH_BITWIDTH-1:0] pitch;	// tone to play
+	reg [12:0] duration;			// duration of tone
 	
 	reg [PITCH_BITWIDTH-1:0] pos_sine;
 	reg [PITCH_BITWIDTH-1:0] neg_sine;
 	reg clk_sine;
 	
 	reg fs_clk;
-	parameter fs_maxval = 'd125;
+	parameter fs_maxval = 'd1250;
 	
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
 	
-	/*always @(ctr_pitch_i) begin
-		casex(Decoded)
-			'd0: ;
-			default: ;
-		endcase
-	end*/
-	
 	// sine generator
-    sine #(PITCH_BITWIDTH) sine (
+    sine sine (
 		.clk(clk),
 		.sin_clk(clk_sine),
 		.reset(reset),
@@ -115,8 +105,6 @@ module prelude (
         	ctr_duration <= 'd0;
         	pitch <= 'd0;
         	duration <= 'd0;
-            //pitch = '{D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-            //duration = '{'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
         end else if (fs_clk) begin	 // count at every fs
 	    	// program flow to play prelude
 	    	case(ctr_pitch_i)
