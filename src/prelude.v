@@ -13,6 +13,8 @@ module prelude (
 );	
 
 	parameter PITCH_BITWIDTH = 9;
+	
+	parameter DAC_PERIOD = 'd511;	// a full 9Bit PWM (19kHz --> TODO: passt?) (ma kann sicher auf fs runtergehen, wär gscheiter oder?)
 
 	// loop through sine with f*len(LUT) --> brings one period --> we need 9 Bit counter
 	// we have 10MHz clk
@@ -31,21 +33,25 @@ module prelude (
 	reg [PITCH_BITWIDTH-1:0] pitch;	// tone to play
 	reg [12:0] duration;			// duration of tone
 	
+	// prelude flow
+	reg [4:0] ctr_pitch_i;
+	reg [12:0] ctr_duration;
+	
+	reg duration_reset;
+	
+	// sine signal
 	reg [PITCH_BITWIDTH-1:0] pos_sine;
 	reg [PITCH_BITWIDTH-1:0] neg_sine;
 	reg clk_sine;
 	
-	reg duration_reset;
-	
+	// sampling frequency
 	reg fs_clk;
 	parameter fs_maxval = 'd1250;	// 8kHz --> 11Bit counter needed
-		
+	
+	// dac clk
 	// TODO: is this really needed (19kHz PWM or 9,7kHz (with clkgen)?)
 	reg dac_clk;
 	parameter dac_clk_maxval = 'd2;	// ~9.7kHz PWM --> 2Bit counter needed
-	
-	reg [4:0] ctr_pitch_i;
-	reg [12:0] ctr_duration;
 	
 	// sine generator
     sine sine (
@@ -55,8 +61,6 @@ module prelude (
 		.pos_out(pos_sine),
 		.neg_out(neg_sine)
     );
-    
-    parameter DAC_PERIOD = 'd511;	// a full 9Bit PWM (19kHz --> TODO: passt?) (ma kann sicher auf fs runtergehen, wär gscheiter oder?)
 	
 	// DAC pos edge
     dac #(PITCH_BITWIDTH) dac_pos (
@@ -120,38 +124,38 @@ module prelude (
         end else if (fs_clk) begin	 // at every fs
 	    	// prelude is stored here
 	    	case(ctr_pitch_i)
-		    	'd0: begin pitch <= D; duration <= 'd4000; end
-				'd1: begin pitch <= G; duration <= 'd4000; end
-				'd2: begin pitch <= G; duration <= 'd2000; end
-				'd3: begin pitch <= A; duration <= 'd2000; end
-				'd4: begin pitch <= B; duration <= 'd4000; end
-				'd5: begin pitch <= G; duration <= 'd4000; end
-				'd6: begin pitch <= Dhigh; duration <= 'd8000; end
-				'd7: begin pitch <= B; duration <= 'd6000; end
-				'd8: begin pitch <= B; duration <= 'd2000; end
-				'd9: begin pitch <= C; duration <= 'd4000; end
-				'd10: begin pitch <= Dhigh; duration <= 'd2000; end
-				'd11: begin pitch <= C; duration <= 'd2000; end
-				'd12: begin pitch <= B; duration <= 'd2000; end
-				'd13: begin pitch <= C; duration <= 'd2000; end
-				'd14: begin pitch <= Dhigh; duration <= 'd4000; end
-				'd15: begin pitch <= A; duration <= 'd2000; end
-				'd16: begin pitch <= G; duration <= 'd2000; end
-				'd17: begin pitch <= A; duration <= 'd2000; end
-				'd18: begin pitch <= B; duration <= 'd2000; end
-				'd19: begin pitch <= A; duration <= 'd4000; end
-		    	default: begin pitch <= 'd511; duration <= 'd4095; end
+		    	'd0: begin pitch <= D; 			duration <= 'd4000; end
+				'd1: begin pitch <= G; 			duration <= 'd4000; end
+				'd2: begin pitch <= G; 			duration <= 'd2000; end
+				'd3: begin pitch <= A; 			duration <= 'd2000; end
+				'd4: begin pitch <= B; 			duration <= 'd4000; end
+				'd5: begin pitch <= G; 			duration <= 'd4000; end
+				'd6: begin pitch <= Dhigh; 		duration <= 'd8000; end
+				'd7: begin pitch <= B; 			duration <= 'd6000; end
+				'd8: begin pitch <= B; 			duration <= 'd2000; end
+				'd9: begin pitch <= C; 			duration <= 'd4000; end
+				'd10: begin pitch <= Dhigh; 	duration <= 'd2000; end
+				'd11: begin pitch <= C; 		duration <= 'd2000; end
+				'd12: begin pitch <= B; 		duration <= 'd2000; end
+				'd13: begin pitch <= C; 		duration <= 'd2000; end
+				'd14: begin pitch <= Dhigh; 	duration <= 'd4000; end
+				'd15: begin pitch <= A; 		duration <= 'd2000; end
+				'd16: begin pitch <= G; 		duration <= 'd2000; end
+				'd17: begin pitch <= A; 		duration <= 'd2000; end
+				'd18: begin pitch <= B; 		duration <= 'd2000; end
+				'd19: begin pitch <= A; 		duration <= 'd4000; end
+		    	default: begin pitch <= 'd511; 	duration <= 'd4095; end
 		    endcase
 		    
 		    // play melody
 	    	if(ctr_duration >= duration-'d1) begin
-	    		if(ctr_pitch_i >= 'd19) begin // len of all pitches
+	    		if(ctr_pitch_i >= 'd19) begin 			// loop over all pitches
 					ctr_pitch_i <= 'd0;
 				end else begin
-					ctr_pitch_i <= ctr_pitch_i + 'd1;
+					ctr_pitch_i <= ctr_pitch_i + 'd1;	// play next pitch duration
 				end
 				ctr_duration <= 'd0;
-				duration_reset <= 'b1;
+				duration_reset <= 'b1;					// pitch finished, reset sine + dac to initial state to start with next tone
 	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
 			end
