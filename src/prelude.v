@@ -115,6 +115,8 @@ module prelude (
         	pitch <= 'd511;
         	duration <= 'd4095;
         	duration_reset <= 'b0;
+        end else if (duration_reset) begin
+        	duration_reset <= 'b0;
         end else if (fs_clk) begin	 // at every fs
 	    	// prelude is stored here
 	    	/*case(ctr_pitch_i)
@@ -176,7 +178,6 @@ module prelude (
 				duration_reset <= 'b1;
 	    	end else begin
 				ctr_duration <= ctr_duration + 'd1;		// increase duration
-				duration_reset <= 'b0;
 			end
         end
     end
