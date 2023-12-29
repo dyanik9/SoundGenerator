@@ -31,8 +31,10 @@ module prelude (
 	//reg [PITCH_BITWIDTH-1:0] pitch [20];		// melody to play
 	//reg [12:0] duration [20];	// duration of each tone
 	
-	parameter [PITCH_BITWIDTH-1:0] pitch [20] = '{D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
-	parameter [12:0] duration [20] = '{'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
+	reg [PITCH_BITWIDTH-1:0] pitch [20] = '{D, G, G, A, B, G, Dhigh, B, B, C, Dhigh, C, B, C, Dhigh, A, G, A, B, A};	// 20 tones
+	
+	
+	reg [12:0] duration [20] = '{'d4000, 'd4000, 'd2000, 'd2000, 'd4000, 'd4000, 'd8000, 'd6000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000, 'd2000, 'd2000, 'd2000, 'd2000, 'd4000};	// das sind number of samples
 	
 	reg [PITCH_BITWIDTH-1:0] pos_sine;
 	reg [PITCH_BITWIDTH-1:0] neg_sine;
@@ -43,6 +45,13 @@ module prelude (
 	
 	reg [4:0] ctr_pitch_i;
 	reg [12:0] ctr_duration;
+	
+	/*always @(ctr_pitch_i) begin
+		casex(Decoded)
+			'd0: ;
+			default: ;
+		endcase
+	end*/
 	
 	// sine generator
     sine #(PITCH_BITWIDTH) sine (
