@@ -119,7 +119,7 @@ module prelude (
         	duration_reset <= 'b0;
         end else if (fs_clk) begin	 // at every fs
 	    	// prelude is stored here
-	    	/*case(ctr_pitch_i)
+	    	case(ctr_pitch_i)
 		    	'd0: begin pitch <= D; duration <= 'd4000; end
 				'd1: begin pitch <= G; duration <= 'd4000; end
 				'd2: begin pitch <= G; duration <= 'd2000; end
@@ -141,30 +141,6 @@ module prelude (
 				'd18: begin pitch <= B; duration <= 'd2000; end
 				'd19: begin pitch <= A; duration <= 'd4000; end
 		    	default: begin pitch <= 'd511; duration <= 'd4095; end
-		    endcase*/
-		    
-		    case(ctr_pitch_i)
-		    	'd0: begin pitch <= D; duration <= 'd400; end
-				'd1: begin pitch <= G; duration <= 'd400; end
-				'd2: begin pitch <= G; duration <= 'd200; end
-				'd3: begin pitch <= A; duration <= 'd200; end
-				'd4: begin pitch <= B; duration <= 'd400; end
-				'd5: begin pitch <= G; duration <= 'd400; end
-				'd6: begin pitch <= Dhigh; duration <= 'd800; end
-				'd7: begin pitch <= B; duration <= 'd600; end
-				'd8: begin pitch <= B; duration <= 'd200; end
-				'd9: begin pitch <= C; duration <= 'd400; end
-				'd10: begin pitch <= Dhigh; duration <= 'd200; end
-				'd11: begin pitch <= C; duration <= 'd200; end
-				'd12: begin pitch <= B; duration <= 'd200; end
-				'd13: begin pitch <= C; duration <= 'd200; end
-				'd14: begin pitch <= Dhigh; duration <= 'd400; end
-				'd15: begin pitch <= A; duration <= 'd200; end
-				'd16: begin pitch <= G; duration <= 'd200; end
-				'd17: begin pitch <= A; duration <= 'd200; end
-				'd18: begin pitch <= B; duration <= 'd200; end
-				'd19: begin pitch <= A; duration <= 'd400; end
-		    	default: begin pitch <= 'd511; duration <= 'd409; end
 		    endcase
 		    
 		    // play melody
