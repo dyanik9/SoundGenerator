@@ -27,7 +27,7 @@ module dac #(parameter N = 8) (
         if (reset) begin
             ctr_r <= 'd0;
         end else if (dac_clk) begin
-			if(ctr_r >= period) begin // len of all pitches
+			if(ctr_r >= period - 'd1) begin // len of all pitches // TODO:  - 'd1 needed?
 				ctr_r <= 'd0;
 			end else begin
 				ctr_r <= ctr_r + 'd1;

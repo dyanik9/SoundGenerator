@@ -17,14 +17,14 @@ module clkgen #(parameter N = 16) (
 	
 	// declare local registers
     reg [N-1:0] ctr_r;
-    reg clk_strobe;// = ctr_r >= maxval;
+    reg clk_strobe;
 
     // here is the action
     always @(posedge clk_i) begin 
         if (reset) begin
             ctr_r <= 'd0;
             clk_strobe <= 'b0;
-        end else if (ctr_r >= maxval) begin
+        end else if (ctr_r >= maxval - 'd1) begin // TODO:  - 'd1 needed? i think so (er zählt ja von 0 bis maxval - 1) == maxval counts
 			ctr_r <= 'd0;
 			clk_strobe <= 'b1;
         end else begin

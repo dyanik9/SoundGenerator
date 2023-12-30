@@ -106,7 +106,7 @@ module prelude (
 		.clk_o(dac_clk)
     );		
     
-    // fs = 8kHz (for PWM) --> clkgen --> maxval = 125 --> 7 Bit
+    // fs = 8kHz, T = 2sec (full tone duration)
     // 1/4 = fs/2 --> duration = 4000 Samples
     // 1/8 = fs/4 --> duration = 2000 Samples
     // 1/2 = fs   --> duration = 8000 Samples
